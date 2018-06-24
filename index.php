@@ -9,19 +9,11 @@ if($youtube = trim($_POST["youtube"])){
 	if(strpos($youtube, 'https://www.youtube.com/watch?v=') !== 0){
 		exit("not youtube url");
 	}
-	if(($otherparam = strpos($youtube, '&')) !== false){
-		$youtube = substr($youtube, 0, $otherparam);
-	}
-	$videoid = substr($youtube, 32);
-	$playing = (object) array(
-		"url" => $youtube,
-		"title" => $youtube,
-		"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
-		"user" => $_SERVER["REMOTE_ADDR"]
-	);
-	if(end($queue)->url !== $playing->url){
-		array_push($queue, $playing);
-		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
+	if (isPlaylist($youtube)) {
+		$urls = getPlaylistUrls($youtube);
+		pushUrls($urls);
+	} else {
+		pushUrls([$youtube]);
 	}
 }else if($file = $_FILES["file"]){
 	$file_pathinfo = pathinfo($file["name"]);
@@ -46,6 +38,59 @@ if($youtube = trim($_POST["youtube"])){
 	);
 	if(end($queue)->url !== $playing->url){
 		array_push($queue, $playing);
+		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
+	}
+}
+
+function isPlaylist($url) {
+	$query = parse_url($url, PHP_URL_QUERY);
+	foreach(explode("&", $query) as $keyVal) {
+		list($key, $_) = explode("=", $keyVal);
+		if ($key == "list") {
+			return true;
+		}
+	}
+	return false;
+}
+
+function getPlaylistUrls($url) {
+	$str = file_get_contents($url);
+
+	$ids = array_map(function ($row) {
+		if (strlen($row) > 1000) {
+			return;
+		}
+		preg_match('/"\/watch\?v=([^&]+).+;index=[0-9]+/u', $row, $matches);
+		if (empty($matches)) {
+			return;
+		}
+		return $matches[1];
+	}, explode("\n", $str));
+
+	return array_map(function ($id) {
+		return sprintf("https://www.youtube.com/watch?v=%s", $id);
+	}, array_filter(array_unique($ids)));
+}
+
+function pushUrls($urls) {
+	$before = count($queue);
+	foreach($urls as $url) {
+		if(($otherparam = strpos($url, '&')) !== false){
+			$url = substr($url, 0, $otherparam);
+		}
+		$videoid = substr($url, 32);
+		$playing = (object) array(
+			"url" => $url,
+			"title" => $url,
+			"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
+			"user" => $_SERVER["REMOTE_ADDR"]
+		);
+		if(end($queue)->url !== $playing->url){
+			array_push($queue, $playing);
+		}
+	}
+
+	if ($before < count($queue)) {
 		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
 	}
 }
