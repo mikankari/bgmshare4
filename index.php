@@ -6,7 +6,8 @@ $queue = file_get_contents(__DIR__ . "/queue.json");
 $queue = json_decode($queue);
 
 if($youtube = trim($_POST["youtube"])){
-	if(strpos($youtube, 'https://www.youtube.com/watch?v=') !== 0){
+	if(strpos($youtube, 'https://www.youtube.com/watch?v=') !== 0
+	&& strpos($youtube, 'https://www.youtube.com/playlist?list=') !== 0){
 		exit("not youtube url");
 	}
 	if (isPlaylist($youtube)) {
