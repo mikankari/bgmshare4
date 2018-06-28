@@ -11,9 +11,9 @@ if($youtube = trim($_POST["youtube"])){
 	}
 	if (isPlaylist($youtube)) {
 		$urls = getPlaylistUrls($youtube);
-		pushUrls($urls);
+		pushUrls($urls, $queue);
 	} else {
-		pushUrls([$youtube]);
+		pushUrls([$youtube], $queue);
 	}
 }else if($file = $_FILES["file"]){
 	$file_pathinfo = pathinfo($file["name"]);
@@ -72,7 +72,7 @@ function getPlaylistUrls($url) {
 	}, array_filter(array_unique($ids)));
 }
 
-function pushUrls($urls) {
+function pushUrls($urls, &$queue) {
 	$before = count($queue);
 	foreach($urls as $url) {
 		if(($otherparam = strpos($url, '&')) !== false){
