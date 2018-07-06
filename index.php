@@ -16,6 +16,8 @@ if($youtube = trim($_POST["youtube"])){
 	} else {
 		pushUrls([$youtube], $queue);
 	}
+
+	redirect();
 }else if($file = $_FILES["file"]){
 	$file_pathinfo = pathinfo($file["name"]);
 	$filename = md5_file($file["tmp_name"]) . "." . $file_pathinfo["extension"];
@@ -41,6 +43,8 @@ if($youtube = trim($_POST["youtube"])){
 		array_push($queue, $playing);
 		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
 	}
+
+	redirect();
 }
 
 function isPlaylist($url) {
@@ -94,6 +98,10 @@ function pushUrls($urls, &$queue) {
 	if ($before < count($queue)) {
 		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
 	}
+}
+
+function redirect() {
+	header('Location: index.php');
 }
 
 ?>
