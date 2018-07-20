@@ -1,9 +1,9 @@
 <?php
 
-$nowplaying = file_get_contents(__DIR__ . "/nowplaying.json");
-$nowplaying = json_decode($nowplaying);
-$queue = file_get_contents(__DIR__ . "/queue.json");
-$queue = json_decode($queue);
+require 'common.php';
+
+$nowplaying = loadJSON('nowplaying.json');
+$queue = loadJSON('queue.json');
 
 if($youtube = trim($_POST["youtube"])){
 	if(strpos($youtube, 'https://www.youtube.com/watch?v=') !== 0
@@ -41,7 +41,7 @@ if($youtube = trim($_POST["youtube"])){
 	);
 	if(end($queue)->url !== $playing->url){
 		array_push($queue, $playing);
-		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
+		saveJSON('queue.json', $queue);
 	}
 
 	redirect();
@@ -96,7 +96,7 @@ function pushUrls($urls, &$queue) {
 	}
 
 	if ($before < count($queue)) {
-		file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
+		saveJSON('queue.json', $queue);
 	}
 }
 
