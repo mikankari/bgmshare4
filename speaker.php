@@ -1,15 +1,16 @@
 <?php
 
-$queue = file_get_contents(__DIR__ . "/queue.json");
-$queue = json_decode($queue);
+require 'common.php';
 
+$queue = loadJSON('queue.json');
+
+// キューが空になったとき、nowplaying を取り出す
 if(($nowplaying = array_shift($queue)) === null){
-	$nowplaying = file_get_contents(__DIR__ . "/nowplaying.json");
-	$nowplaying = json_decode($nowplaying);
+	$nowplaying = loadJSON('nowplaying.json', $nowplaying);
 }
 
-file_put_contents(__DIR__ . "/queue.json", json_encode($queue));
-file_put_contents(__DIR__ . "/nowplaying.json", json_encode($nowplaying));
+saveJSON('queue.json', $queue);
+saveJSON('nowplaying.json', $nowplaying);
 
 ?>
 
