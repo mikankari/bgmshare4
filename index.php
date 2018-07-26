@@ -77,6 +77,32 @@ function getPlaylistUrls($url) {
 	}, array_filter(array_unique($ids)));
 }
 
+function getPlayingInfo($videoid) {
+	$info = json_decode(file_get_contents("https://www.googleapis.com/youtube/v3/videos?key=AIzaSyAlD24YU3BXTpPxm0lpdo_Aj8g4NEl7Ldg&id=$videoid&part=snippet,contentDetails"));
+	if (isset($info->items[0])) {
+		$length = new DateInterval($info->items[0]->contentDetails->duration);
+		if ($length->h > 0) {
+			$length_format = '%h:%I:%S';
+		} else {
+			$length_format = '%i:%S';
+		}
+		return (object) array(
+			"url" => "https://www.youtube.com/watch?v=$videoid",
+			"title" => $info->items[0]->snippet->title,
+			"length" => $length->format($length_format),
+			"thumb" => $info->items[0]->snippet->thumbnails->default->url,
+			"user" => $_SERVER["REMOTE_ADDR"],
+		);
+	} else {
+		return (object) array(
+			"url" => "https://www.youtube.com/watch?v=$videoid",
+			"title" => "Unknown",
+			"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
+			"user" => $_SERVER["REMOTE_ADDR"],
+		);
+	}
+}
+
 function pushUrls($urls, &$queue) {
 	$before = count($queue);
 	foreach($urls as $url) {
@@ -84,12 +110,7 @@ function pushUrls($urls, &$queue) {
 			$url = substr($url, 0, $otherparam);
 		}
 		$videoid = substr($url, 32);
-		$playing = (object) array(
-			"url" => $url,
-			"title" => $url,
-			"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
-			"user" => $_SERVER["REMOTE_ADDR"]
-		);
+		$playing = getPlayingInfo($videoid);
 		if(end($queue)->url !== $playing->url){
 			array_push($queue, $playing);
 		}
@@ -165,7 +186,7 @@ div#addqueue{
 						<li>
 							<div id="thumbbox">
 								<div><img src="<?php print $value->thumb; ?>" alt="サムネイル"></div>
-								<div><?php print $value->title; ?></div>
+								<div><?php print $value->title; ?> (<?php print $value->length; ?>)</div>
 								<div>from <?php print $value->user; ?></div>
 							</div>
 						</li>
