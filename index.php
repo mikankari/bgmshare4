@@ -134,7 +134,11 @@ function redirect() {
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssbase/cssbase-min.css">
 <style>
 
-div#addqueue{
+a {
+	color: #698080;
+}
+
+#addqueue{
 	background-color: #ffffd1;
 }
 
@@ -156,7 +160,7 @@ div#addqueue{
 					<div>
 						<div id="thumbbox">
 							<div><img src="<?php print $nowplaying->thumb; ?>" alt="サムネイル"></div>
-							<div><?php print $nowplaying->title; ?></div>
+							<div><a href="<?php print $nowplaying->url; ?>" target="_blank"><?php print $nowplaying->title; ?> (<?php print $nowplaying->length; ?>)</a></div>
 							<div>from <?php print $nowplaying->user; ?></div>
 						</div>
 					</div>
@@ -186,7 +190,7 @@ div#addqueue{
 						<li>
 							<div id="thumbbox">
 								<div><img src="<?php print $value->thumb; ?>" alt="サムネイル"></div>
-								<div><?php print $value->title; ?> (<?php print $value->length; ?>)</div>
+								<div><a href="<?php print $value->url; ?>" target="_blank"><?php print $value->title; ?> (<?php print $value->length; ?>)</a></div>
 								<div>from <?php print $value->user; ?></div>
 							</div>
 						</li>
