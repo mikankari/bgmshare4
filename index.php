@@ -34,6 +34,7 @@ if($youtube = trim($_POST["youtube"])){
 
 	move_uploaded_file($file["tmp_name"], __DIR__ . "/files/" . $filename);
 	$playing = (object) array(
+		"id" => uniqid(),
 		"url" => "files/$filename",
 		"title" => $file["name"],
 		"thumb" => "files/file.png",
@@ -87,6 +88,7 @@ function getPlayingInfo($videoid) {
 			$length_format = '%i:%S';
 		}
 		return (object) array(
+			"id" => uniqid(),
 			"url" => "https://www.youtube.com/watch?v=$videoid",
 			"title" => $info->items[0]->snippet->title,
 			"length" => $length->format($length_format),
@@ -95,6 +97,7 @@ function getPlayingInfo($videoid) {
 		);
 	} else {
 		return (object) array(
+			"id" => uniqid(),
 			"url" => "https://www.youtube.com/watch?v=$videoid",
 			"title" => "Unknown",
 			"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
