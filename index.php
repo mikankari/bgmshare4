@@ -96,13 +96,7 @@ function getPlayingInfo($videoid) {
 			"user" => $_SERVER["REMOTE_ADDR"],
 		);
 	} else {
-		return (object) array(
-			"id" => uniqid(),
-			"url" => "https://www.youtube.com/watch?v=$videoid",
-			"title" => "Unknown",
-			"thumb" => "http://i.ytimg.com/vi/$videoid/default.jpg",
-			"user" => $_SERVER["REMOTE_ADDR"],
-		);
+		return null;
 	}
 }
 
@@ -114,7 +108,7 @@ function pushUrls($urls, &$queue) {
 		}
 		$videoid = substr($url, 32);
 		$playing = getPlayingInfo($videoid);
-		if(end($queue)->url !== $playing->url){
+		if($playing && end($queue)->url !== $playing->url){
 			array_push($queue, $playing);
 		}
 	}
