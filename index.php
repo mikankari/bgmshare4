@@ -108,6 +108,9 @@ function pushUrls($urls, &$queue) {
 		}
 		$videoid = substr($url, 32);
 		$playing = getPlayingInfo($videoid);
+		if(! $playing && count($urls) === 1) {
+			exit("deleted video");
+		}
 		if($playing && end($queue)->url !== $playing->url){
 			array_push($queue, $playing);
 		}
