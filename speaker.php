@@ -45,6 +45,9 @@ function onYouTubeIframeAPIReady(){
 				if(player.getPlayerState() === YT.PlayerState.ENDED){
 					window.location.reload();
 				}
+			},
+			onError: function () {
+				window.location.reload();
 			}
 		}
 	});
