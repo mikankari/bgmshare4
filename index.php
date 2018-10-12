@@ -134,7 +134,7 @@ function redirect() {
 <head>
 <meta charset="UTF-8">
 <title>BGM Share 4</title>
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssbase/cssbase-min.css">
+<link rel="stylesheet" type="text/css" href="cssbase-min.css">
 <style>
 
 a {
