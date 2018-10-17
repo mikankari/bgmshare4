@@ -19,8 +19,8 @@ saveJSON('nowplaying.json', $nowplaying);
 <head>
 <meta charset="UTF-8">
 <title>BGM Share 4</title>
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssbase/cssbase-min.css">
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" type="text/css" href="cssbase-min.css">
+<script src="jquery-3.3.1.min.js"></script>
 <script>
 
 <?php
