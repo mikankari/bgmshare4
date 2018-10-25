@@ -192,6 +192,12 @@ a {
 								<div><img src="<?php print $value->thumb; ?>" alt="サムネイル"></div>
 								<div><a href="<?php print $value->url; ?>" target="_blank"><?php print $value->title; ?> (<?php print $value->length; ?>)</a></div>
 								<div>from <?php print $value->user; ?></div>
+								<div>
+									<form action="delete.php" method="post">
+										<input type="hidden" name="id" value="<?php print $value->id; ?>">
+										<button type="submit">Delete</button>
+									</form>
+								</div>
 							</div>
 						</li>
 <?php
