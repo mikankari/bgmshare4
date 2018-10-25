@@ -142,6 +142,10 @@ a {
 	background-color: #ffffd1;
 }
 
+.thumbbox button {
+	vertical-align: top;
+}
+
 </style>
 </head>
 
@@ -158,7 +162,7 @@ a {
 				<div id="nowplaying">
 					<h2>Now Playing</h2>
 					<div>
-						<div id="thumbbox">
+						<div class="thumbbox">
 							<div><img src="<?php print $nowplaying->thumb; ?>" alt="サムネイル"></div>
 							<div><a href="<?php print $nowplaying->url; ?>" target="_blank"><?php print $nowplaying->title; ?> (<?php print $nowplaying->length; ?>)</a></div>
 							<div>from <?php print $nowplaying->user; ?></div>
@@ -188,7 +192,7 @@ a {
 	foreach($queue as $value){
 ?>
 						<li>
-							<div id="thumbbox">
+							<div class="thumbbox">
 								<div><img src="<?php print $value->thumb; ?>" alt="サムネイル"></div>
 								<div><a href="<?php print $value->url; ?>" target="_blank"><?php print $value->title; ?> (<?php print $value->length; ?>)</a></div>
 								<div>from <?php print $value->user; ?></div>
